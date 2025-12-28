@@ -3,88 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shreeji Mega Shop</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>श्रीजी मेगा शॉप</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --accent: #f39c12;
-            --red: #d63031;
-            --green: #27ae60;
-            --glass: rgba(255, 255, 255, 0.9);
-        }
-
+        :root { --primary: #2c3e50; --accent: #f39c12; --red: #d63031; --green: #27ae60; --glass: rgba(255, 255, 255, 0.9); }
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; height: 100vh; overflow: hidden; background: #000; }
+        
+        .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: url('bg.jpg') no-repeat center 15%; background-size: cover; }
+        .bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(35px); -webkit-mask-image: radial-gradient(circle at center 30%, transparent 5%, black 85%); }
 
-        /* FACE FOCUS BACKGROUND */
-        .bg-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: url('bg.jpg') no-repeat;
-            background-size: cover;
-            background-position: center 15%; /* चेहरे पर फोकस के लिए थोड़ा ऊपर */
-        }
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: all 0.5s ease; opacity: 0; transform: translateX(30px); pointer-events: none; display: flex; flex-direction: column; }
+        #home { opacity: 1; transform: translateX(0); pointer-events: auto; }
+        .screen.active { opacity: 1; transform: translateX(0); pointer-events: auto; z-index: 10; }
 
-        .bg-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            backdrop-filter: blur(35px); /* गहरा धुंधलापन */
-            -webkit-mask-image: radial-gradient(circle at center 30%, transparent 5%, black 85%);
-            mask-image: radial-gradient(circle at center 30%, transparent 5%, black 85%);
-        }
+        header { background: rgba(44, 62, 80, 0.95); color: white; padding: 20px; text-align: center; font-weight: 600; font-size: 20px; position: relative; }
+        .back-btn { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 32px; padding: 0 15px; cursor: pointer; color: var(--accent); }
 
-        .screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-            display: flex; flex-direction: column; opacity: 0; transform: translateY(30px); pointer-events: none;
-        }
-
-        #home { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .screen.active { opacity: 1; transform: translateY(0); pointer-events: auto; z-index: 10; }
-
-        header { background: rgba(44, 62, 80, 0.95); color: white; padding: 20px; text-align: center; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-
-        /* Home Page */
         .home-content { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-        .home-title { color: white; font-size: 36px; text-shadow: 0 5px 25px rgba(0,0,0,1); text-align: center; margin-bottom: 60px; }
+        .home-title { color: white; font-size: 36px; text-align: center; margin-bottom: 50px; text-shadow: 0 4px 15px rgba(0,0,0,1); }
         .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 90%; }
-        .tile { background: var(--glass); padding: 40px 10px; border-radius: 30px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.5); }
-        .tile i { font-size: 50px; display: block; margin-bottom: 10px; font-style: normal; }
+        .tile { background: var(--glass); padding: 40px 10px; border-radius: 30px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal { background: white; padding: 25px; width: 90%; max-width: 400px; border-radius: 20px; text-align: center; }
+        .modal input { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; font-size: 18px; text-align: center; }
+        .m-btns { display: flex; gap: 10px; margin-top: 20px; }
+        .m-btns button { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; }
 
-        /* Modal / Window */
-        .modal-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000;
-        }
-        .modal { background: white; padding: 30px; width: 88%; border-radius: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); text-align: center; }
-        .modal input { width: 100%; padding: 18px; margin: 20px 0; border: 2px solid #eee; border-radius: 15px; font-size: 22px; outline: none; text-align: center; }
-
-        /* Lists */
-        .item-list { flex-grow: 1; overflow-y: auto; padding: 15px; }
-        .row { background: white; padding: 20px; margin-bottom: 12px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-
-        /* Calculator */
+        /* Calculator Styles */
         .calc-display { height: 120px; background: #000; color: #39ff14; font-size: 50px; text-align: right; padding: 35px 20px; font-family: monospace; }
         .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; background: #1a1a1a; flex-grow: 1; }
-        .calc-btn { background: #333; color: white; border: none; border-radius: 15px; font-size: 24px; box-shadow: 0 5px #000; }
-        .calc-btn:active { transform: translateY(3px); box-shadow: 0 2px #000; }
-        .btn-eq { background: var(--accent); box-shadow: 0 5px #9e6d00; }
+        .calc-btn { background: #333; color: white; border: none; border-radius: 15px; font-size: 24px; cursor: pointer; }
+        .calc-btn:active { background: #555; }
 
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 70px; height: 70px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .total-debt-box { position: fixed; bottom: 30px; left: 20px; background: white; color: var(--red); padding: 12px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold; z-index: 50; border: 2px solid var(--red); }
+        .item-list { flex-grow: 1; overflow-y: auto; padding: 15px; padding-bottom: 110px; }
+        .row { background: white; padding: 18px; margin-bottom: 12px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        #slipTemplate { position: absolute; left: -9999px; width: 450px; background: white; padding: 30px; color: black; }
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 70px; height: 70px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 60; }
     </style>
 </head>
 <body>
 
     <div class="bg-container"><div class="bg-overlay"></div></div>
 
-    <div id="modalOverlay" class="modal-overlay">
+    <div id="customModal" class="modal-overlay">
         <div class="modal">
-            <h3 id="modalTitle">एंट्री</h3>
-            <input id="modalInput" placeholder="...">
-            <div style="display:flex; gap:10px">
-                <button onclick="closeModal()" style="flex:1; padding:15px; border:none; border-radius:12px; background:#f0f0f0;">रद्द</button>
-                <button id="modalConfirm" style="flex:2; padding:15px; background:var(--primary); color:white; border:none; border-radius:12px; font-weight:bold;">सुरक्षित करें</button>
+            <h3 id="mTitle" style="margin-top:0;">शीर्षक</h3>
+            <div id="mBody" style="margin-bottom:15px;"></div>
+            <div id="mInputs"></div>
+            <div class="m-btns">
+                <button id="mCancel" style="background:#eee;">पीछे</button>
+                <button id="mConfirm" style="background:var(--primary); color:white;">ठीक है</button>
             </div>
         </div>
+    </div>
+
+    <div id="slipTemplate">
+        <h1 style="text-align:center; margin:0;">श्रीजी मेगा शॉप</h1>
+        <p style="text-align:center; border-bottom:2px dashed #000; padding-bottom:10px;">डिजिटल रसीद</p>
+        <p><b>ग्राहक:</b> <span id="sName"></span></p>
+        <p><b>तारीख:</b> <span id="sDate"></span></p>
+        <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
+            <thead><tr style="background:#f2f2f2;"><th style="border:1px solid #ddd; padding:10px; text-align:left;">विवरण</th><th style="border:1px solid #ddd; padding:10px; text-align:right;">राशि</th></tr></thead>
+            <tbody id="sTableBody"></tbody>
+        </table>
+        <h2 style="text-align:right;">कुल बकाया: ₹ <span id="sTotal"></span></h2>
     </div>
 
     <div id="home" class="screen">
@@ -97,32 +85,33 @@
         </div>
     </div>
 
-    <div id="udhari" class="screen" style="background: rgba(245,245,245,0.95);">
-        <header><span style="float:left" onclick="openScreen('home')">←</span> ग्राहकों की सूची</header>
-        <div style="padding:15px"><input type="text" id="search" placeholder="🔍 नाम खोजें..." oninput="drawCustomers()" style="width:100%; padding:15px; border-radius:25px; border:none; box-shadow:0 5px 15px rgba(0,0,0,0.05); outline:none;"></div>
+    <div id="udhari" class="screen" style="background: #f8f9fa;">
+        <header><span class="back-btn" onclick="openScreen('home')">←</span> ग्राहकों की सूची</header>
+        <div style="padding:15px"><input type="text" id="search" placeholder="🔍 नाम खोजें..." oninput="drawCustomers()" style="width:100%; padding:14px; border-radius:15px; border:none; outline:none; box-shadow: 0 4px 10px rgba(0,0,0,0.05);"></div>
         <div id="customerList" class="item-list"></div>
-        <button class="fab" onclick="askName()">+</button>
+        <div class="total-debt-box">कुल ऋण: ₹ <span id="globalDebt">0</span></div>
+        <button class="fab" onclick="addNewCustomer()">+</button>
     </div>
 
     <div id="details" class="screen" style="background: white;">
-        <header><span style="float:left" onclick="openScreen('udhari')">←</span> <span id="activeName">नाम</span></header>
-        <div style="padding:40px 20px; text-align:center; border-bottom:1px solid #f0f0f0;">
-            <div style="color:gray; font-size:14px;">कुल बकाया</div>
-            <div id="activeBalance" style="font-size:50px; font-weight:600;">₹ 0</div>
+        <header><span class="back-btn" onclick="openScreen('udhari')">←</span> <span id="activeCustName">ग्राहक</span></header>
+        <div style="padding:30px; text-align:center; border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:14px; color:gray;">कुल बकाया राशि</div>
+            <div id="activeBalance" style="font-size:45px; font-weight:600;">₹ 0</div>
         </div>
         <div id="txHistory" class="item-list"></div>
-        <div style="padding:15px; display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-            <button onclick="askAmount(true)" style="padding:20px; border:none; border-radius:15px; background:var(--red); color:white; font-weight:bold;">उधार (+)</button>
-            <button onclick="askAmount(false)" style="padding:20px; border:none; border-radius:15px; background:var(--green); color:white; font-weight:bold;">जमा (-)</button>
+        <div style="padding:15px; display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <button onclick="addTx(true)" style="padding:18px; border:none; border-radius:12px; background:var(--red); color:white; font-weight:bold;">उधार (+)</button>
+            <button onclick="addTx(false)" style="padding:18px; border:none; border-radius:12px; background:var(--green); color:white; font-weight:bold;">जमा (-)</button>
         </div>
-        <button onclick="generateSlip()" style="margin: 0 15px 25px; padding:12px; border:1.5px solid #eee; border-radius:12px; background:white; color:#666; font-weight:bold;">📄 रसीद डाउनलोड करें</button>
+        <button onclick="initSlipFlow()" style="margin: 0 15px 25px; padding:12px; border:1px solid #ddd; border-radius:10px; background:white; font-weight:bold; color:var(--primary);">📄 रसीद इमेज सेव करें</button>
     </div>
 
     <div id="calculator" class="screen">
-        <header><span style="float:left" onclick="openScreen('home')">←</span> कैलकुलेटर</header>
+        <header><span class="back-btn" onclick="openScreen('home')">←</span> कैलकुलेटर</header>
         <div class="calc-display" id="cDisplay">0</div>
         <div class="calc-grid">
-            <button class="calc-btn" onclick="cClear()" style="color:var(--red)">AC</button>
+            <button class="calc-btn" onclick="cCl()" style="color:var(--red)">AC</button>
             <button class="calc-btn" onclick="cIn('/')">÷</button>
             <button class="calc-btn" onclick="cIn('*')">×</button>
             <button class="calc-btn" onclick="cIn('-')">-</button>
@@ -133,7 +122,7 @@
             <button class="calc-btn" onclick="cIn('4')">4</button>
             <button class="calc-btn" onclick="cIn('5')">5</button>
             <button class="calc-btn" onclick="cIn('6')">6</button>
-            <button class="calc-btn btn-eq" onclick="cEval()" style="grid-row: span 2;">=</button>
+            <button class="calc-btn" onclick="cEv()" style="background:var(--accent); grid-row: span 2;">=</button>
             <button class="calc-btn" onclick="cIn('1')">1</button>
             <button class="calc-btn" onclick="cIn('2')">2</button>
             <button class="calc-btn" onclick="cIn('3')">3</button>
@@ -142,11 +131,9 @@
         </div>
     </div>
 
-    <canvas id="canvas" style="display:none"></canvas>
-
     <script>
-        let db = JSON.parse(localStorage.getItem('shreeji_vfinal')) || [];
-        let cur = -1;
+        let db = JSON.parse(localStorage.getItem('shreeji_v5')) || [];
+        let curIdx = -1;
 
         function openScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -154,90 +141,114 @@
             if(id === 'udhari') drawCustomers();
         }
 
-        // FIX: ग्राहक के लिए टेक्स्ट कीबोर्ड और अमाउंट के लिए नंबर कीबोर्ड
-        function showModal(title, isNumber, cb) {
-            const over = document.getElementById('modalOverlay');
-            const input = document.getElementById('modalInput');
-            document.getElementById('modalTitle').innerText = title;
-            input.value = "";
-            
-            if(isNumber) {
-                input.type = "number";
-                input.inputMode = "decimal"; // केवल नंबर कीबोर्ड
-                input.placeholder = "0";
-            } else {
-                input.type = "text";
-                input.inputMode = "text"; // नाम के लिए ABCD कीबोर्ड
-                input.placeholder = "नाम लिखें...";
-            }
-            
-            over.style.display = 'flex';
-            input.focus();
-            document.getElementById('modalConfirm').onclick = () => { if(input.value) { cb(input.value); closeModal(); } };
+        function myModal(title, body, inputs, callback) {
+            const modal = document.getElementById('customModal');
+            document.getElementById('mTitle').innerText = title;
+            document.getElementById('mBody').innerText = body;
+            const container = document.getElementById('mInputs');
+            container.innerHTML = "";
+            inputs.forEach(inp => {
+                const i = document.createElement('input');
+                i.placeholder = inp.p; i.type = inp.t || "text"; i.id = "mi_" + inp.id;
+                container.appendChild(i);
+            });
+            modal.style.display = 'flex';
+            document.getElementById('mConfirm').onclick = () => {
+                let res = {};
+                inputs.forEach(inp => res[inp.id] = document.getElementById("mi_" + inp.id).value);
+                modal.style.display = 'none';
+                callback(true, res);
+            };
+            document.getElementById('mCancel').onclick = () => { modal.style.display = 'none'; callback(false); };
         }
-        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
-        function askName() { showModal("ग्राहक का नाम", false, (n) => { db.push({name:n, tx:[]}); save(); drawCustomers(); }); }
-        
-        function drawCustomers() {
-            const list = document.getElementById('customerList');
-            const q = document.getElementById('search').value.toLowerCase();
-            list.innerHTML = "";
-            db.forEach((c, i) => {
-                if(c.name.toLowerCase().includes(q)) {
-                    let b = c.tx.reduce((a, t) => a + (t.isC ? t.amt : -t.amt), 0);
-                    list.innerHTML += `<div class="row" onclick="viewCust(${i})">
-                        <b style="font-size:18px;">${c.name}</b>
-                        <b style="color:${b>=0?'var(--red)':'var(--green)'};">₹${Math.abs(b)} ${b>=0?'बाकी':'जमा'}</b>
-                    </div>`;
-                }
+        function addNewCustomer() {
+            myModal("नया ग्राहक", "जानकारी भरें", [{id:'n', p:'नाम'}, {id:'p', p:'मोबाइल नंबर', t:'number'}], (ok, res) => {
+                if(ok && res.n) { db.push({name: res.n, phone: res.p || "", tx: []}); save(); drawCustomers(); }
             });
         }
 
-        function viewCust(i) {
-            cur = i; document.getElementById('activeName').innerText = db[i].name; drawTx(); openScreen('details');
+        function drawCustomers() {
+            const list = document.getElementById('customerList');
+            const q = document.getElementById('search').value.toLowerCase();
+            let totalG = 0; list.innerHTML = "";
+            db.forEach((c, i) => {
+                let bal = c.tx.reduce((a, t) => a + (t.isC ? t.amt : -t.amt), 0);
+                if(bal > 0) totalG += bal;
+                if(c.name.toLowerCase().includes(q)) {
+                    list.innerHTML += `<div class="row" onclick="viewCust(${i})">
+                        <div><b>${c.name}</b><br><small>${c.phone || 'नंबर नहीं'}</small></div>
+                        <b style="color:${bal>=0?'var(--red)':'var(--green)'};">₹${Math.abs(bal)} ${bal>=0?'बाकी':'जमा'}</b>
+                    </div>`;
+                }
+            });
+            document.getElementById('globalDebt').innerText = totalG;
         }
 
-        function askAmount(isC) {
-            showModal(isC?"उधार राशि?":"जमा राशि?", true, (a) => {
-                db[cur].tx.push({ amt:parseFloat(a), isC, time:new Date().toLocaleString('hi-IN', {dateStyle:'short', timeStyle:'short'}) });
-                save(); drawTx();
+        function viewCust(i) { curIdx = i; document.getElementById('activeCustName').innerText = db[i].name; drawTx(); openScreen('details'); }
+
+        function addTx(isC) {
+            myModal(isC ? "उधार" : "जमा", "रकम डालें", [{id:'a', p:'₹ 0', t:'number'}], (ok, res) => {
+                if(ok && res.a) {
+                    db[curIdx].tx.push({ amt: parseFloat(res.a), isC, time: new Date().toLocaleString('hi-IN', {dateStyle:'short', timeStyle:'short'}) });
+                    save(); drawTx();
+                }
             });
         }
 
         function drawTx() {
             const h = document.getElementById('txHistory');
-            const c = db[cur];
-            let b = c.tx.reduce((a, t) => a + (t.isC ? t.amt : -t.amt), 0);
-            document.getElementById('activeBalance').innerText = `₹ ${Math.abs(b)}`;
-            document.getElementById('activeBalance').style.color = b >= 0 ? 'var(--red)' : 'var(--green)';
-            h.innerHTML = c.tx.slice().reverse().map(t => `<div class="row">
+            let bal = db[curIdx].tx.reduce((a, t) => a + (t.isC ? t.amt : -t.amt), 0);
+            document.getElementById('activeBalance').innerText = "₹ " + Math.abs(bal);
+            document.getElementById('activeBalance').style.color = bal >= 0 ? 'var(--red)' : 'var(--green)';
+            h.innerHTML = db[curIdx].tx.slice().reverse().map(t => `<div class="row">
                 <div><small>${t.time}</small><br><b>${t.isC?'उधार दिया':'जमा मिला'}</b></div>
-                <b style="color:${t.isC?'var(--red)':'var(--green)'}; font-size:19px;">₹${t.amt}</b>
+                <b style="color:${t.isC?'var(--red)':'var(--green)'};">₹${t.amt}</b>
             </div>`).join('');
         }
 
-        function generateSlip() {
-            const c = db[cur];
-            const canv = document.getElementById('canvas');
-            const ctx = canv.getContext('2d');
-            canv.width = 500; canv.height = 600;
-            ctx.fillStyle = "white"; ctx.fillRect(0,0,500,600);
-            ctx.fillStyle = "#2c3e50"; ctx.font = "bold 25px Arial";
-            ctx.fillText("श्रीजी मेगा शॉप - रसीद", 50, 60);
-            ctx.font = "20px Arial"; ctx.fillText("ग्राहक: " + c.name, 50, 110);
-            ctx.fillText("बकाया: ₹" + document.getElementById('activeBalance').innerText, 50, 150);
-            const link = document.createElement('a');
-            link.download = c.name + "_slip.png";
-            link.href = canv.toDataURL(); link.click();
+        function initSlipFlow() {
+            myModal("रसीद", "क्या रसीद इमेज सेव करना चाहते हैं?", [], (ok) => { if(ok) generateSlip(); });
         }
 
-        function save() { localStorage.setItem('shreeji_vfinal', JSON.stringify(db)); }
+        function generateSlip() {
+            const c = db[curIdx];
+            let tempBal = 0, lastZeroIdx = -1;
+            c.tx.forEach((t, i) => { tempBal += (t.isC ? t.amt : -t.amt); if(tempBal === 0) lastZeroIdx = i; });
+            let txToPrint = c.tx.slice(lastZeroIdx + 1);
+            if(txToPrint.length === 0) txToPrint = c.tx;
 
+            document.getElementById('sName').innerText = c.name;
+            document.getElementById('sDate').innerText = new Date().toLocaleDateString('hi-IN');
+            let balText = document.getElementById('activeBalance').innerText;
+            document.getElementById('sTotal').innerText = balText.replace('₹ ','');
+            
+            document.getElementById('sTableBody').innerHTML = txToPrint.map(t => `
+                <tr><td style="border:1px solid #ddd; padding:10px;">${t.time} (${t.isC?'उधार':'जमा'})</td>
+                <td style="border:1px solid #ddd; padding:10px; text-align:right; color:${t.isC?'red':'green'};">₹${t.amt}</td></tr>`).join('');
+
+            html2canvas(document.getElementById('slipTemplate')).then(canvas => {
+                const img = canvas.toDataURL("image/jpeg");
+                const link = document.createElement('a');
+                link.download = `Shreeji_${c.name}.jpg`; link.href = img; link.click();
+                
+                setTimeout(() => {
+                    myModal("WhatsApp", "क्या ग्राहक को रसीद का मैसेज भेजना चाहते हैं?", [], (send) => {
+                        if(send) {
+                            let msg = `नमस्ते ${c.name}, श्रीजी मेगा शॉप पर आपका बकाया ₹${document.getElementById('sTotal').innerText} है। रसीद फोटो गैलरी से भेजें।`;
+                            window.open(`https://wa.me/${c.phone ? '91'+c.phone : ''}?text=${encodeURIComponent(msg)}`, '_blank');
+                        }
+                    });
+                }, 1000);
+            });
+        }
+
+        function save() { localStorage.setItem('shreeji_v5', JSON.stringify(db)); }
+        
         let cV = "";
         function cIn(v) { cV += v; document.getElementById('cDisplay').innerText = cV; }
-        function cClear() { cV = ""; document.getElementById('cDisplay').innerText = "0"; }
-        function cEval() { try { cV = eval(cV).toString(); document.getElementById('cDisplay').innerText = cV; } catch(e) { cClear(); } }
+        function cCl() { cV = ""; document.getElementById('cDisplay').innerText = "0"; }
+        function cEv() { try { cV = eval(cV).toString(); document.getElementById('cDisplay').innerText = cV; } catch { cCl(); } }
     </script>
 </body>
 </html>
