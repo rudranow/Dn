@@ -31,7 +31,6 @@
         /* Modal & Dialogs */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 2000; }
         
-        /* Fixed Modal Layout */
         .modal { background: white; width: 95%; max-width: 450px; border-radius: 20px; display: flex; flex-direction: column; height: 90vh; max-height: 800px; overflow: hidden; position: relative; }
         
         .modal-header { padding: 15px; text-align: center; border-bottom: 1px solid #eee; flex-shrink: 0; }
@@ -42,28 +41,45 @@
         .modal-footer { border-top: 1px solid #eee; padding: 15px; display: flex; gap: 10px; flex-shrink: 0; background: white; }
         .modal-footer button { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; font-size: 16px; }
 
-        /* Wheel & Input Styles */
-        .input-group { margin-bottom: 15px; }
+        /* Modified Input Styles */
+        .input-group { margin-bottom: 15px; position: relative; }
         .input-group label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; text-align: center; }
-        .manual-input { width: 100%; padding: 10px; text-align: center; font-size: 20px; border: 2px solid var(--accent); border-radius: 8px; font-weight: bold; margin-bottom: 5px; background: #fff; color: #000; }
         
-        .wheel-wrapper { position: relative; height: 100px; overflow: hidden; background: #f4f4f4; border-radius: 10px; border: 1px solid #ddd; }
-        .wheel-scroll { height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; padding: 35px 0; -ms-overflow-style: none; scrollbar-width: none; }
-        .wheel-scroll::-webkit-scrollbar { display: none; }
-        .wheel-item { height: 30px; line-height: 30px; text-align: center; scroll-snap-align: center; font-size: 16px; color: #aaa; transition: all 0.2s; }
-        .wheel-item.active { color: #000; font-weight: bold; font-size: 20px; transform: scale(1.2); }
-        
-        .wheel-overlay-top { position: absolute; top: 0; left: 0; width: 100%; height: 35px; background: linear-gradient(to bottom, white, rgba(255,255,255,0)); pointer-events: none; }
-        .wheel-overlay-bottom { position: absolute; bottom: 0; left: 0; width: 100%; height: 35px; background: linear-gradient(to top, white, rgba(255,255,255,0)); pointer-events: none; }
-        .wheel-center-line { position: absolute; top: 50%; left: 0; width: 100%; height: 30px; transform: translateY(-50%); border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; pointer-events: none; background: rgba(0,0,0,0.02); }
+        .styled-input { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #ddd; border-radius: 10px; outline: none; transition: 0.3s; }
+        .styled-input:focus { border-color: var(--accent); }
 
-        .dual-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* Suggestions Box */
+        .suggestions-list {
+            position: absolute; top: 100%; left: 0; width: 100%;
+            background: white; border: 1px solid #ddd; border-radius: 0 0 10px 10px;
+            max-height: 200px; overflow-y: auto; z-index: 100;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .suggestion-item { padding: 12px; border-bottom: 1px solid #f5f5f5; cursor: pointer; font-size: 14px; }
+        .suggestion-item:hover { background: #f9f9f9; }
 
-        .add-item-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: bold; margin: 15px 0; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        /* Add Button */
+        .add-item-btn { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 80px; margin-left: 10px; flex-shrink: 0; }
         
-        .cart-list { border: 1px solid #eee; border-radius: 10px; padding: 10px; margin-bottom: 10px; background: #fafafa; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px dashed #ddd; font-size: 14px; }
-        .del-item { color: red; font-weight: bold; margin-left: 10px; cursor: pointer; }
+        /* Translucent Box Style */
+        .cart-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; min-height: 50px; }
+        .cart-tag {
+            background: rgba(44, 62, 80, 0.1);
+            border: 1px solid rgba(44, 62, 80, 0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 14px; color: #333;
+            animation: fadeIn 0.3s ease;
+        }
+        .tag-remove { 
+            background: rgba(214, 48, 49, 0.15); color: var(--red); 
+            width: 22px; height: 22px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-weight: bold; font-size: 14px;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Contact Picker Button */
         .contact-btn { position: absolute; right: 5px; top: 5px; bottom: 5px; background: var(--accent); border: none; border-radius: 8px; width: 40px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; }
@@ -79,7 +95,6 @@
         #slipTemplate { position: absolute; left: -9999px; width: 450px; background: white; padding: 30px; color: black; }
         .fab { position: fixed; bottom: 30px; right: 30px; width: 70px; height: 70px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 60; }
         
-        /* Simple Modal Sizing override */
         #customModal .modal { height: auto; } 
     </style>
 </head>
@@ -109,49 +124,31 @@
                 <h3>सामान जोड़ें</h3>
             </div>
             
-            <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" id="itemName" placeholder="सामान का नाम लिखें" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; text-align:center;">
+            <div class="modal-body" style="display:flex; flex-direction:column;">
+                
+                <div style="display:flex; align-items:flex-end;">
+                    <div class="input-group" style="flex-grow:1; margin-bottom:0;">
+                        <label>सामान का नाम (Item Name)</label>
+                        <input type="text" id="itemName" class="styled-input" placeholder="सर्च करें या लिखें..." oninput="handleItemSearch(this.value)" autocomplete="off">
+                        <div id="suggestionBox" class="suggestions-list"></div>
+                    </div>
+                    <button class="add-item-btn" onclick="addCurrentItem()">+ Add</button>
                 </div>
 
-                <div class="dual-col">
-                    <div class="input-group">
-                        <label>मात्रा (Qty)</label>
-                        <input type="number" id="manualQty" class="manual-input" value="1" inputmode="numeric" oninput="syncWheelToInput('qty')" onclick="this.select()">
-                        <div class="wheel-wrapper">
-                            <div class="wheel-overlay-top"></div>
-                            <div class="wheel-center-line"></div>
-                            <div class="wheel-overlay-bottom"></div>
-                            <div class="wheel-scroll" id="wheelQty" onscroll="syncInputToWheel('qty')">
-                                </div>
-                        </div>
-                    </div>
+                <div style="margin-top:20px; margin-bottom:10px; font-size:12px; color:#666;">चुने गए सामान:</div>
+                <div class="cart-container" id="cartList">
+                    <div style="width:100%; text-align:center; color:#ccc; padding:10px;">अभी कोई सामान नहीं</div>
+                </div>
 
+                <div style="flex-grow:1;"></div>
+
+                <div style="border-top:1px dashed #ddd; padding-top:20px; margin-top:10px;">
                     <div class="input-group">
-                        <label>मूल्य (Price)</label>
-                        <input type="number" id="manualPrice" class="manual-input" value="5" inputmode="numeric" oninput="syncWheelToInput('price')" onclick="this.select()">
-                        <div class="wheel-wrapper">
-                            <div class="wheel-overlay-top"></div>
-                            <div class="wheel-center-line"></div>
-                            <div class="wheel-overlay-bottom"></div>
-                            <div class="wheel-scroll" id="wheelPrice" onscroll="syncInputToWheel('price')">
-                                </div>
-                        </div>
+                        <label style="font-size:14px; color:var(--red); font-weight:bold;">कुल राशि (Total Price)</label>
+                        <input type="number" id="finalPrice" class="styled-input" style="border-color:var(--primary); font-weight:bold; font-size:22px; text-align:center;" placeholder="₹ 0" inputmode="numeric">
                     </div>
                 </div>
 
-                <button class="add-item-btn" onclick="addToCart()">
-                    <span>+ लिस्ट में डालें</span>
-                </button>
-
-                <div class="cart-list" id="cartList">
-                    <div style="text-align:center; color:#999; margin-top:20px;">अभी कोई सामान नहीं है</div>
-                </div>
-
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; font-size:18px;">
-                    <b>कुल राशि:</b>
-                    <b style="color:var(--red);" id="cartTotal">₹ 0</b>
-                </div>
             </div>
 
             <div class="modal-footer">
@@ -165,7 +162,7 @@
         <div class="modal" style="height:auto; max-height:80vh;">
             <div class="modal-header"><h3>बिल विवरण</h3></div>
             <div class="modal-body">
-                <div class="cart-list" id="billList"></div>
+                <div id="billList" style="padding:10px;"></div>
             </div>
             <div class="modal-footer">
                 <button onclick="document.getElementById('billViewModal').style.display='none'" style="background:var(--primary); color:white;">बंद करें</button>
@@ -221,7 +218,10 @@
             <button onclick="openItemEntry()" style="padding:18px; border:none; border-radius:12px; background:var(--red); color:white; font-weight:bold;">उधार (+)</button>
             <button onclick="addTx(false)" style="padding:18px; border:none; border-radius:12px; background:var(--green); color:white; font-weight:bold;">जमा (-)</button>
         </div>
-        <button onclick="initSlipFlow()" style="margin: 0 15px 25px; padding:12px; border:1px solid #ddd; border-radius:10px; background:white; font-weight:bold; color:var(--primary);">📄 रसीद इमेज सेव करें</button>
+        <div style="display:flex; gap:10px; padding:0 15px 25px;">
+            <button onclick="initSlipFlow()" style="flex:1; padding:12px; border:1px solid #ddd; border-radius:10px; background:white; font-weight:bold; color:var(--primary);">📄 रसीद निकालें</button>
+            <button onclick="shareOnWhatsapp()" style="flex:1; padding:12px; border:none; border-radius:10px; background:#25D366; font-weight:bold; color:white;">💬 WhatsApp भेजें</button>
+        </div>
     </div>
 
     <div id="calculator" class="screen">
@@ -251,12 +251,31 @@
     <script>
         let db = JSON.parse(localStorage.getItem('shreeji_v5')) || [];
         let curIdx = -1;
-        let tempCart = [];
         
-        // Wheel Data Arrays
-        const qtyData = Array.from({length: 100}, (_, i) => i + 1);
-        let priceData = [1, 2, 3];
-        for(let i=5; i<=2000; i+=5) priceData.push(i);
+        // --- Product List Management (Dynamic) ---
+        const defaultProducts = [
+            "Biscuit – Biskut", "Chocolate – Chocolate", "Chips – Chips", "Namkeen – Namkeen",
+            "Rice – Chawal", "Flour – Aata", "Oil – Tel", "Soap – Sabun", "Shampoo – Shampoo",
+            "Toothpaste – Toothpaste", "Detergent – Detergent", "Noodles – Noodles", "Pasta – Pasta",
+            "Bread – Bread", "Milk – Doodh", "Cheese – Cheese", "Butter – Butter", "Yogurt – Dahi",
+            "Tea – Chai", "Coffee – Coffee", "Sugar – Cheeni", "Salt – Namak", "Spices – Masale",
+            "Pickle – Achar", "Sauce – Sauce", "Ketchup – Ketchup", "Jam – Jam", "Honey – Shahad",
+            "Cake – Cake", "Icecream – Icecream", "Snacks – Snacks", "Sweets – Mithai",
+            "Dryfruits – SookheMewa", "Pulses – Dal", "Lentils – Dal", "Cereals – Anaj",
+            "Juice – Juice", "Softdrink – ColdDrink", "Water – Paani", "Floorcleaner – FloorCleaner",
+            "Dishwash – BartanLiquid", "Tissue – Tissue", "Napkin – Napkin", "Candles – Mombatti",
+            "Matches – Maachis", "Batteries – Cell", "Soapbar – NahaneKaSabun", "Handwash – Handwash",
+            "Facewash – Facewash", "Hairoil – BaalTel", "Cream – Cream", "Lotion – Lotion",
+            "Deodorant – Deo", "Perfume – Perfume", "Powder – Powder", "Biscuitsnacks – NamkeenBiskut",
+            "Chocolatesweets – ChocolateMithai", "Readyfood – ReadyKhana", "Frozenfood – FrozenKhana",
+            "Bakeryitems – BakerySamaan"
+        ];
+        
+        // Load saved products or use default
+        let productList = JSON.parse(localStorage.getItem('shreeji_products')) || defaultProducts;
+
+        // Temporary storage for item names only
+        let tempItemNames = [];
 
         function openScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -264,56 +283,124 @@
             if(id === 'udhari') drawCustomers();
         }
 
-        // --- Wheel Logic ---
-        function initWheel(id, data) {
-            const container = document.getElementById(id);
-            container.innerHTML = "";
-            container.innerHTML += `<div style="height:35px;"></div>`; 
-            data.forEach(val => {
-                const el = document.createElement('div');
-                el.className = 'wheel-item';
-                el.innerText = val;
-                el.dataset.val = val;
-                container.appendChild(el);
-            });
-            container.innerHTML += `<div style="height:35px;"></div>`;
-        }
-        
-        initWheel('wheelQty', qtyData);
-        initWheel('wheelPrice', priceData);
-
-        function syncInputToWheel(type) {
-            const container = document.getElementById(type === 'qty' ? 'wheelQty' : 'wheelPrice');
-            const items = container.querySelectorAll('.wheel-item');
+        // --- NEW SEARCH & ITEM LOGIC ---
+        function handleItemSearch(val) {
+            const box = document.getElementById('suggestionBox');
+            if(!val) { box.style.display = 'none'; return; }
             
-            // Find closest item to center
-            let closest = null;
-            let minDiff = Infinity;
-            items.forEach(item => {
-                let diff = Math.abs((item.offsetTop + 15) - (container.scrollTop + 50)); 
-                if(diff < minDiff) { minDiff = diff; closest = item; }
-            });
-
-            if(closest) {
-                const input = document.getElementById(type === 'qty' ? 'manualQty' : 'manualPrice');
-                if(document.activeElement !== input) {
-                    input.value = closest.dataset.val;
-                }
-                items.forEach(i => i.classList.remove('active'));
-                closest.classList.add('active');
+            const matches = productList.filter(item => item.toLowerCase().includes(val.toLowerCase()));
+            
+            if(matches.length > 0) {
+                box.innerHTML = matches.map(m => 
+                    `<div class="suggestion-item" onclick="selectSuggestion('${m}')">${m}</div>`
+                ).join('');
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
             }
         }
 
-        function syncWheelToInput(type) {
-            const val = parseInt(document.getElementById(type === 'qty' ? 'manualQty' : 'manualPrice').value);
+        function selectSuggestion(name) {
+            document.getElementById('itemName').value = name;
+            document.getElementById('suggestionBox').style.display = 'none';
+            addCurrentItem();
+        }
+
+        function openItemEntry() {
+            tempItemNames = []; // Reset list
+            document.getElementById('itemName').value = "";
+            document.getElementById('finalPrice').value = "";
+            document.getElementById('suggestionBox').style.display = 'none';
+            updateCartUI();
+            document.getElementById('itemEntryModal').style.display = 'flex';
+            document.getElementById('itemName').focus();
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemEntryModal').style.display = 'none';
+        }
+
+        function addCurrentItem() {
+            const input = document.getElementById('itemName');
+            const val = input.value.trim();
             if(!val) return;
-            const container = document.getElementById(type === 'qty' ? 'wheelQty' : 'wheelPrice');
-            const items = Array.from(container.querySelectorAll('.wheel-item'));
-            const target = items.find(i => parseInt(i.dataset.val) === val);
-            
-            if(target) {
-                container.scrollTo({ top: target.offsetTop - 35, behavior: 'smooth' });
+
+            // Learn new item logic
+            if(!productList.includes(val)) {
+                productList.push(val);
+                localStorage.setItem('shreeji_products', JSON.stringify(productList));
             }
+
+            tempItemNames.push(val);
+            input.value = "";
+            document.getElementById('suggestionBox').style.display = 'none';
+            input.focus();
+            updateCartUI();
+        }
+
+        function removeName(i) {
+            tempItemNames.splice(i, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cartList');
+            if(tempItemNames.length === 0) {
+                list.innerHTML = '<div style="width:100%; text-align:center; color:#ccc; padding:10px;">अभी कोई सामान नहीं</div>';
+                return;
+            }
+            // Translucent box with Cross styling - Only Names
+            list.innerHTML = tempItemNames.map((name, i) => `
+                <div class="cart-tag">
+                    ${name}
+                    <span class="tag-remove" onclick="removeName(${i})">×</span>
+                </div>
+            `).join('');
+        }
+
+        function saveCartTx() {
+            // Case 1: No items added -> Direct Amount Fallback
+            if(tempItemNames.length === 0) {
+                // If text is in input but not added
+                const pending = document.getElementById('itemName').value.trim();
+                if(pending) {
+                    addCurrentItem();
+                    setTimeout(saveCartTx, 100);
+                    return;
+                }
+                
+                closeItemModal();
+                // Open fallback modal
+                myModal("सीधे रकम जोड़ें", "कोई सामान सेलेक्ट नहीं किया गया। क्या सीधे रकम (Amount) डालना चाहते हैं?", [{id:'amt', p:'राशि (₹)', t:'number'}], (ok, res) => {
+                    if(ok && res.amt) {
+                        pushTransaction(parseFloat(res.amt), true, []);
+                    } else {
+                        // If cancelled, reopen item modal
+                        openItemEntry();
+                    }
+                });
+                return;
+            }
+
+            // Case 2: Items added -> Validate Total Price
+            const priceVal = document.getElementById('finalPrice').value;
+            if(!priceVal) { alert("कृपया कुल राशि (Total Price) भरें"); document.getElementById('finalPrice').focus(); return; }
+            
+            const totalAmt = parseFloat(priceVal);
+            pushTransaction(totalAmt, true, tempItemNames);
+            closeItemModal();
+        }
+
+        function pushTransaction(amt, isC, itemsArr) {
+            // itemsArr is array of strings (names)
+            db[curIdx].tx.push({ 
+                amt: amt, 
+                isC: isC, 
+                time: new Date().toLocaleString('hi-IN', {dateStyle:'short', timeStyle:'short'}),
+                items: itemsArr // Store array of strings
+            });
+            save(); 
+            drawTx();
         }
 
         // --- Generic Modal & Contact Picker ---
@@ -359,105 +446,24 @@
             document.getElementById('mCancel').onclick = () => { modal.style.display = 'none'; callback(false); };
         }
 
-        // --- Item Entry Logic ---
-        function openItemEntry() {
-            tempCart = [];
-            document.getElementById('itemName').value = "";
-            document.getElementById('manualQty').value = "1";
-            document.getElementById('manualPrice').value = "5";
-            syncWheelToInput('qty');
-            syncWheelToInput('price');
-            updateCartUI();
-            document.getElementById('itemEntryModal').style.display = 'flex';
-        }
-
-        function closeItemModal() {
-            document.getElementById('itemEntryModal').style.display = 'none';
-        }
-
-        function addToCart() {
-            const name = document.getElementById('itemName').value.trim();
-            const qty = parseInt(document.getElementById('manualQty').value);
-            const price = parseFloat(document.getElementById('manualPrice').value);
-
-            if(!name) { alert("कृपया सामान का नाम लिखें"); return; }
-            if(!qty || !price) { alert("मात्रा और मूल्य सही डालें"); return; }
-
-            tempCart.push({ name, qty, price, total: qty * price });
-            
-            // RESET FIELDS LOGIC
-            document.getElementById('itemName').value = "";
-            document.getElementById('manualQty').value = "1";
-            document.getElementById('manualPrice').value = ""; // Empty so they can type fresh
-            
-            syncWheelToInput('qty');
-            // Don't sync price wheel to empty, keep it or set default
-            document.getElementById('itemName').focus();
-            
-            updateCartUI();
-        }
-
-        function removeFromCart(i) {
-            tempCart.splice(i, 1);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const list = document.getElementById('cartList');
-            if(tempCart.length === 0) {
-                list.innerHTML = '<div style="text-align:center; color:#999; margin-top:20px;">अभी कोई सामान नहीं है</div>';
-                document.getElementById('cartTotal').innerText = "₹ 0";
-                return;
-            }
-            let gTotal = 0;
-            list.innerHTML = tempCart.map((item, i) => {
-                gTotal += item.total;
-                return `
-                <div class="cart-item">
-                    <div><b>${item.name}</b> <br> <small>${item.qty} x ₹${item.price}</small></div>
-                    <div style="display:flex; align-items:center;">
-                        <b>₹${item.total}</b>
-                        <span class="del-item" onclick="removeFromCart(${i})">×</span>
-                    </div>
-                </div>`;
-            }).join('');
-            document.getElementById('cartTotal').innerText = "₹ " + gTotal;
-        }
-
-        function saveCartTx() {
-            // DIRECT AMOUNT LOGIC (If cart is empty)
-            if(tempCart.length === 0) {
-                myModal("सीधे रकम जोड़ें", "कोई सामान नहीं जोड़ा गया। क्या सीधे रकम (Amount) लिखना चाहते हैं?", [{id:'amt', p:'राशि (₹)', t:'number'}], (ok, res) => {
-                    if(ok && res.amt) {
-                         db[curIdx].tx.push({ 
-                            amt: parseFloat(res.amt), isC: true, 
-                            time: new Date().toLocaleString('hi-IN', {dateStyle:'short', timeStyle:'short'})
-                        });
-                        save(); drawTx(); closeItemModal();
-                    }
-                });
-                return;
-            }
-
-            let totalAmt = tempCart.reduce((a, b) => a + b.total, 0);
-            db[curIdx].tx.push({ 
-                amt: totalAmt, isC: true, 
-                time: new Date().toLocaleString('hi-IN', {dateStyle:'short', timeStyle:'short'}),
-                items: JSON.parse(JSON.stringify(tempCart))
-            });
-            save(); drawTx(); closeItemModal();
-        }
-
         function showTxDetails(txIdx) {
             const tx = db[curIdx].tx[txIdx];
-            if(!tx.items || tx.items.length === 0) return;
             const modal = document.getElementById('billViewModal');
-            document.getElementById('billList').innerHTML = tx.items.map(item => `
-                <div class="cart-item">
-                    <div><b>${item.name}</b> <br> <small>${item.qty} x ₹${item.price}</small></div>
-                    <b>₹${item.total}</b>
-                </div>
-            `).join('') + `<div style="text-align:right; padding-top:10px; font-size:18px;"><b>कुल: ₹${tx.amt}</b></div>`;
+            
+            let content = "";
+            if(tx.items && tx.items.length > 0) {
+                // FIXED: Handle Objects in items array
+                content = `<b>सामान:</b><br>` + tx.items.map(item => {
+                    let dName = (typeof item === 'object' && item !== null) ? (item.name || item.item || 'Unknown') : item;
+                    return `<div style="padding:8px; border-bottom:1px dashed #eee;">${dName}</div>`;
+                }).join('');
+            } else {
+                content = `<div style="padding:20px; text-align:center; color:#666;">सीधे रकम जोड़ी गई</div>`;
+            }
+            
+            document.getElementById('billList').innerHTML = content + 
+                `<div style="text-align:right; padding-top:15px; font-size:22px; color:${tx.isC?'var(--red)':'var(--green)'};"><b>${tx.isC?'उधार':'जमा'}: ₹${tx.amt}</b></div>`;
+            
             modal.style.display = 'flex';
         }
 
@@ -501,8 +507,7 @@
         function addTx(isC) {
             myModal(isC ? "उधार" : "जमा", "रकम डालें", [{id:'a', p:'₹ 0', t:'number'}], (ok, res) => {
                 if(ok && res.a) {
-                    db[curIdx].tx.push({ amt: parseFloat(res.a), isC, time: new Date().toLocaleString('hi-IN', {dateStyle:'short', timeStyle:'short'}) });
-                    save(); drawTx();
+                    pushTransaction(parseFloat(res.a), isC, []);
                 }
             });
         }
@@ -517,8 +522,8 @@
             document.getElementById('activeBalance').innerText = "₹ " + Math.abs(bal);
             document.getElementById('activeBalance').style.color = bal >= 0 ? 'var(--red)' : 'var(--green)';
             h.innerHTML = rows.slice().reverse().map(obj => `
-            <div class="row" onclick="${obj.hasItems ? `showTxDetails(${obj.idx})` : ''}" style="${obj.hasItems ? 'cursor:pointer' : ''}">
-                <div><small>${obj.t.time}</small><br><b>${obj.t.isC ? (obj.hasItems ? 'सामान (क्लिक करें)' : 'उधार दिया') : 'जमा मिला'}</b></div>
+            <div class="row" onclick="showTxDetails(${obj.idx})" style="cursor:pointer;">
+                <div><small>${obj.t.time}</small><br><b>${obj.t.isC ? (obj.hasItems ? 'सामान (लिस्ट देखें)' : 'उधार दिया') : 'जमा मिला'}</b></div>
                 <b style="color:${obj.t.isC?'var(--red)':'var(--green)'};">₹${obj.t.amt}</b>
             </div>`).join('');
         }
@@ -529,39 +534,89 @@
             const c = db[curIdx];
             let tempBal = 0, lastZeroIdx = -1;
             c.tx.forEach((t, i) => { tempBal += (t.isC ? t.amt : -t.amt); if(tempBal === 0) lastZeroIdx = i; });
-            let txToPrint = c.tx.slice(lastZeroIdx + 1);
-            if(txToPrint.length === 0) txToPrint = c.tx;
+            
+            const validTx = c.tx.slice(lastZeroIdx + 1);
+            if(validTx.length === 0) { alert("कोई बकाया हिसाब नहीं है"); return; }
 
             document.getElementById('sName').innerText = c.name;
             document.getElementById('sDate').innerText = new Date().toLocaleDateString('hi-IN');
-            document.getElementById('sTotal').innerText = document.getElementById('activeBalance').innerText.replace('₹ ','');
             
-            document.getElementById('sTableBody').innerHTML = txToPrint.map(t => {
-                let desc = t.isC ? (t.items ? `सामान (${t.items.length} आइटम)` : 'उधार') : 'जमा';
-                return `<tr><td style="border:1px solid #ddd; padding:10px;">${t.time} <br><small>${desc}</small></td>
-                <td style="border:1px solid #ddd; padding:10px; text-align:right; color:${t.isC?'red':'green'};">₹${t.amt}</td></tr>`;
-            }).join('');
+            let html = "", total = 0;
+            validTx.forEach(t => {
+                total += (t.isC ? t.amt : -t.amt);
+                let desc = "";
+                if(t.isC) {
+                    if(t.items && t.items.length > 0) {
+                        // FIXED: Handle [object Object] issue
+                        desc = t.items.map(i => (typeof i === 'object' && i !== null) ? (i.name || i.item || '') : i).join(', ');
+                    }
+                    else desc = "उधार";
+                } else {
+                    desc = "जमा";
+                }
+                
+                const color = t.isC ? 'red' : 'green';
+                html += `<tr>
+                    <td style="border:1px solid #ddd; padding:10px;">${desc}<br><small>${t.time}</small></td>
+                    <td style="border:1px solid #ddd; padding:10px; text-align:right; color:${color}; font-weight:bold;">${t.isC?'':'-'}₹${t.amt}</td>
+                </tr>`;
+            });
+            document.getElementById('sTableBody').innerHTML = html;
+            document.getElementById('sTotal').innerText = total;
 
-            html2canvas(document.getElementById('slipTemplate')).then(canvas => {
-                const img = canvas.toDataURL("image/jpeg");
+            const slip = document.getElementById('slipTemplate');
+            html2canvas(slip).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `Shreeji_${c.name}.jpg`; link.href = img; link.click();
-                setTimeout(() => {
-                    myModal("WhatsApp", "क्या ग्राहक को मैसेज भेजना चाहते हैं?", [], (send) => {
-                        if(send) {
-                            let msg = `नमस्ते ${c.name}, श्रीजी मेगा शॉप पर आपका बकाया ₹${document.getElementById('sTotal').innerText} है।`;
-                            window.open(`https://wa.me/${c.phone ? '91'+c.phone : ''}?text=${encodeURIComponent(msg)}`, '_blank');
-                        }
-                    });
-                }, 1000);
+                link.download = `Bill_${c.name}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
             });
         }
 
+        function shareOnWhatsapp() {
+            const c = db[curIdx];
+            let bal = c.tx.reduce((a, t) => a + (t.isC ? t.amt : -t.amt), 0);
+            
+            const msg = `नमस्ते ${c.name},%0aश्रीजी मेगा शॉप (डिजिटल खाता बुक)%0a------------------%0aआपका कुल बकाया राशि है: *₹${bal}*%0aकृपया भुगतान करें। धन्यवाद।`;
+            
+            if(c.phone && c.phone.length >= 10) {
+                // Direct Chat
+                window.location.href = `https://wa.me/91${c.phone}?text=${msg}`;
+            } else {
+                // General Share (Select Contact)
+                window.location.href = `whatsapp://send?text=${msg}`;
+            }
+        }
+
         function save() { localStorage.setItem('shreeji_v5', JSON.stringify(db)); }
-        let cV = "";
-        function cIn(v) { cV += v; document.getElementById('cDisplay').innerText = cV; }
-        function cCl() { cV = ""; document.getElementById('cDisplay').innerText = "0"; }
-        function cEv() { try { cV = eval(cV).toString(); document.getElementById('cDisplay').innerText = cV; } catch { cCl(); } }
+        
+        // --- Calculator Logic (Fixed & Completed) ---
+        let cExp = "";
+        
+        function cIn(v) { 
+            const d = document.getElementById('cDisplay');
+            // Prevent starting with operator
+            if(cExp === "" && (v==='/'||v==='*'||v==='+'||v==='-')) return;
+            cExp += v;
+            d.innerText = cExp;
+        }
+
+        function cCl() {
+            cExp = "";
+            document.getElementById('cDisplay').innerText = "0";
+        }
+
+        function cEv() {
+            try {
+                // Safety check: eval can be risky, but for a simple calc app it's okay.
+                const res = eval(cExp); 
+                document.getElementById('cDisplay').innerText = res;
+                cExp = res.toString();
+            } catch(e) {
+                document.getElementById('cDisplay').innerText = "Error";
+                cExp = "";
+            }
+        }
     </script>
 </body>
 </html>
